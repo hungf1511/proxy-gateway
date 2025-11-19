@@ -65,7 +65,7 @@ def main():
 
         # Build parent directive
         # Format: parent <type> <host> <port> [username] [password]
-        parent_line = f'parent {parent_type} {host} {port}'
+        parent_line = f'parent {parent_type} {host} {port} 1'
         if user and password:
             parent_line += f' {user} {password}'
 

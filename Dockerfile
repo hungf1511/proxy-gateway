@@ -1,16 +1,16 @@
-# Use a lightweight and stable base image
-FROM alpine:latest
+# Stage 1: Get the stable, pre-compiled 3proxy binary from the official image
+FROM 3proxy/3proxy:latest as builder
 
-# Enable the 'community' repository where the 3proxy package is located
-RUN echo "http://dl-cdn.alpinelinux.org/alpine/latest-stable/community" >> /etc/apk/repositories
+# Stage 2: Create our final, lightweight image with Python
+FROM alpine:3.16
 
-# Update package list again to include the community repository
-RUN apk update
+# Install runtime dependencies
+RUN apk update && apk add --no-cache python3 strace
 
-# Install 3proxy, python3, and strace
-RUN apk add --no-cache 3proxy python3 strace
+# Copy the 3proxy binary from the builder stage into our final image
+COPY --from=builder /usr/bin/3proxy /usr/local/bin/3proxy
 
-# Copy the gateway scripts
+# Copy our custom gateway scripts
 COPY . /gateway/
 WORKDIR /gateway
 

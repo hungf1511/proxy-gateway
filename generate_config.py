@@ -52,14 +52,13 @@ def main():
         user = parts.get('user')
         password = parts.get('pass')
 
-        # Map protocol to 3proxy parent type
-        # 1000 = HTTP, 1001 = HTTPS, 1080 = SOCKS5
+        # Map protocol to 3proxy parent type keyword
         if protocol == 'http':
-            parent_type = 1000
+            parent_type = 'http'
         elif protocol == 'https':
-            parent_type = 1001
+            parent_type = 'https'
         elif protocol == 'socks5':
-            parent_type = 1080
+            parent_type = 'socks5'
         else:
             print(f"Warning: Unsupported protocol {protocol} for proxy {proxy_line}")
             continue

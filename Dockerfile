@@ -2,7 +2,7 @@ FROM ubuntu:22.04
 
 # Install 3proxy and Python
 RUN apt-get update && \
-    apt-get install -y wget build-essential python3 && \
+    apt-get install -y wget build-essential python3 strace && \
     rm -rf /var/lib/apt/lists/*
 
 # Download and install 3proxy

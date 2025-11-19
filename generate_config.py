@@ -21,14 +21,15 @@ def main():
         'nserver 8.8.4.4',
         'nserver 1.1.1.1',
         '',
-        '# Cache settings (disabled for pure forwarding)',
-        'nscache 0',
-        '',
         '# Timeouts',
         'timeouts 1 5 30 60 180 1800 15 60',
         '',
         '# Logging (to stdout for Docker)',
         'log -D',
+        '',
+        '# Authentication & ACL (allow all - traffic already restricted by internal network)',
+        'auth none',
+        'allow * * *',
         ''
     ]
 
@@ -71,8 +72,8 @@ def main():
 
         # Add proxy configuration
         conf_parts.append(f'# --- Proxy {i + 1}: {protocol.upper()} {host}:{port} on gateway port {listen_port} ---')
-        conf_parts.append(f'proxy -p{listen_port} -a')  # -a = allow all, -p = port
         conf_parts.append(parent_line)
+        conf_parts.append(f'proxy -p{listen_port} -a')  # -a = allow all, -p = port
         conf_parts.append('')
 
         # Log proxy info for debugging

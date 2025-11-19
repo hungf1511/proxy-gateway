@@ -6,16 +6,18 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Download and install 3proxy
+ARG THREE_PROXY_VERSION=0.9.5
+
 RUN cd /tmp && \
-    wget https://github.com/z3APA3A/3proxy/archive/refs/tags/0.9.4.tar.gz && \
-    tar -xzf 0.9.4.tar.gz && \
-    cd 3proxy-0.9.4 && \
+    wget https://github.com/z3APA3A/3proxy/archive/refs/tags/${THREE_PROXY_VERSION}.tar.gz && \
+    tar -xzf ${THREE_PROXY_VERSION}.tar.gz && \
+    cd 3proxy-${THREE_PROXY_VERSION} && \
     make -f Makefile.Linux && \
     mkdir -p /usr/local/3proxy/bin /usr/local/3proxy/conf /usr/local/3proxy/logs && \
     cp bin/3proxy /usr/local/3proxy/bin/ && \
     chmod +x /usr/local/3proxy/bin/3proxy && \
     cd / && \
-    rm -rf /tmp/3proxy-0.9.4 /tmp/0.9.4.tar.gz
+    rm -rf /tmp/3proxy-${THREE_PROXY_VERSION} /tmp/${THREE_PROXY_VERSION}.tar.gz
 
 # Add 3proxy to PATH
 ENV PATH="/usr/local/3proxy/bin:${PATH}"

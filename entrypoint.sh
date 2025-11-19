@@ -24,6 +24,6 @@ mkdir -p /usr/local/3proxy/logs
 
 echo "Configuration generated. Starting 3proxy..."
 
-# Start 3proxy with the generated config in foreground mode (-n = no daemon)
-exec /usr/local/3proxy/bin/3proxy -n /usr/local/3proxy/conf/3proxy.cfg
+# Start 3proxy with the generated config (-n = no daemon)
+exec /usr/local/3proxy/bin/3proxy /usr/local/3proxy/conf/3proxy.cfg -n
 

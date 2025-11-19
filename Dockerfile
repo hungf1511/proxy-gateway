@@ -8,7 +8,8 @@ FROM alpine:3.16
 RUN apk update && apk add --no-cache python3 strace
 
 # Copy the 3proxy binary from the builder stage into our final image
-COPY --from=builder /usr/bin/3proxy /usr/local/bin/3proxy
+# The correct path in the official image is /usr/local/bin/3proxy
+COPY --from=builder /usr/local/bin/3proxy /usr/local/bin/3proxy
 
 # Copy our custom gateway scripts
 COPY . /gateway/

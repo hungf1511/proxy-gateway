@@ -1,15 +1,26 @@
-# Stage 1: Get the stable, pre-compiled 3proxy binary from the official image
-FROM 3proxy/3proxy:latest as builder
-
-# Stage 2: Create our final, lightweight image with Python
+# Use a specific, stable version of Alpine Linux to ensure a consistent build environment
 FROM alpine:3.16
 
-# Install runtime dependencies
-RUN apk update && apk add --no-cache python3 strace
+# Define the 3proxy version to use
+ARG THREE_PROXY_VERSION=0.9.5
 
-# Copy the 3proxy binary from the builder stage into our final image
-# The correct path in the official image is /usr/local/bin/3proxy
-COPY --from=builder /usr/local/bin/3proxy /usr/local/bin/3proxy
+# In a single RUN command for atomicity and smaller layers:
+# 1. Install build dependencies (build-base, wget) and runtime dependencies (python3, strace).
+# 2. Download and compile 3proxy from the official source.
+# 3. Move the compiled binary to a standard location.
+# 4. Clean up the source code and build dependencies to keep the final image small.
+RUN apk update && \
+    apk add --no-cache --virtual .build-deps build-base wget && \
+    apk add --no-cache python3 strace && \
+    cd /tmp && \
+    wget https://github.com/z3APA3A/3proxy/archive/refs/tags/${THREE_PROXY_VERSION}.tar.gz && \
+    tar -xzf ${THREE_PROXY_VERSION}.tar.gz && \
+    cd 3proxy-${THREE_PROXY_VERSION} && \
+    make -f Makefile.Linux && \
+    cp bin/3proxy /usr/local/bin/3proxy && \
+    cd / && \
+    rm -rf /tmp/* && \
+    apk del .build-deps
 
 # Copy our custom gateway scripts
 COPY . /gateway/

@@ -1,0 +1,32 @@
+FROM ubuntu:22.04
+
+# Install 3proxy and Python
+RUN apt-get update && \
+    apt-get install -y wget build-essential python3 && \
+    rm -rf /var/lib/apt/lists/*
+
+# Download and install 3proxy
+RUN cd /tmp && \
+    wget https://github.com/z3APA3A/3proxy/archive/refs/tags/0.9.4.tar.gz && \
+    tar -xzf 0.9.4.tar.gz && \
+    cd 3proxy-0.9.4 && \
+    make -f Makefile.Linux && \
+    mkdir -p /usr/local/3proxy/bin /usr/local/3proxy/conf /usr/local/3proxy/logs && \
+    cp bin/3proxy /usr/local/3proxy/bin/ && \
+    chmod +x /usr/local/3proxy/bin/3proxy && \
+    cd / && \
+    rm -rf /tmp/3proxy-0.9.4 /tmp/0.9.4.tar.gz
+
+# Add 3proxy to PATH
+ENV PATH="/usr/local/3proxy/bin:${PATH}"
+
+# Copy the gateway scripts
+COPY . /gateway/
+WORKDIR /gateway
+
+# Make entrypoint executable
+RUN chmod +x entrypoint.sh
+
+# Set the entrypoint
+ENTRYPOINT ["/gateway/entrypoint.sh"]
+

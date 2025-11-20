@@ -8,7 +8,7 @@ ARG TARGETARCH=amd64
 
 # Install dependencies, download and install sing-box
 RUN apk update && \
-    apk add --no-cache wget ca-certificates && \
+    apk add --no-cache wget ca-certificates curl && \
     wget "https://github.com/SagerNet/sing-box/releases/download/v${SING_BOX_VERSION}/sing-box-${SING_BOX_VERSION}-linux-${TARGETARCH}.tar.gz" -O /tmp/sing-box.tar.gz && \
     tar -xzf /tmp/sing-box.tar.gz -C /tmp && \
     mv "/tmp/sing-box-${SING_BOX_VERSION}-linux-${TARGETARCH}/sing-box" /usr/local/bin/ && \

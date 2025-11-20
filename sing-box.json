@@ -26,6 +26,29 @@
       "tag": "direct"
     }
   ],
+  "dns": {
+    "servers": [
+      {
+        "tag": "local",
+        "address": "8.8.8.8",
+        "detour": "direct"
+      },
+      {
+        "tag": "local2",
+        "address": "1.1.1.1",
+        "detour": "direct"
+      }
+    ],
+    "rules": [
+      {
+        "outbound": "any",
+        "server": "local"
+      }
+    ],
+    "strategy": "prefer_ipv4",
+    "disable_cache": false,
+    "disable_expire": false
+  },
   "route": {
     "rules": [
       {
@@ -41,6 +64,7 @@
         "inbound": ["tun-in"],
         "outbound": "proxy-out"
       }
-    ]
+    ],
+    "auto_detect_interface": true
   }
 }
